@@ -15,6 +15,13 @@ This R package extends the [lassosum](https://github.com/tshmak/lassosum) framew
 
 Install from GitHub install.packages("devtools") devtools::install_github("m88020362/lassosumMRS")
 
+## Demo Data
+
+This package includes example files in `inst/extdata/`:
+-   `test_data.txt`: Simulated individual-level data
+-   `model_2D.txt`: MB-MDR raw model output
+-   `output_2D.txt`: MB-MDR F-statistic output
+
 ## Example
 
 ```{r}
