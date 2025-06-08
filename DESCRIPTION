@@ -1,0 +1,32 @@
+Package: lassosumMRS
+Type: Package
+Title: Multilocus Risk Scoring Based on MB-MDR and Pairwise Epistatic Interactions
+Version: 0.0.1
+Authors@R:
+    c(
+      person("Wei-Ru", "Chen", email = "m88020362@email.com", role = c("aut", "cre")),
+      person("Tsz-Han", "Mak", role = c("ctb"), comment = "Original author of lassosum")
+    )
+Description: 
+    A modified and extended version of the 'lassosum' package tailored for modeling 
+    multilocus risk scores (MRS) using MB-MDR-derived SNP–SNP interaction statistics. 
+    This pipeline enables soft-thresholding on F-statistics, risk score calculation 
+    based on categorical interaction encoding (HLO), and model validation via 
+    phenotype-stratified score distributions and ROC/AUC analysis.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends: R (>= 3.6.0)
+Imports:
+    dplyr,
+    ggplot2,
+    magrittr,
+    pROC,
+    stats,
+    graphics,
+    utils,
+    parallel
+Suggests:
+    knitr,
+    rmarkdown
