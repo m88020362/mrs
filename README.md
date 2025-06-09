@@ -56,5 +56,9 @@ plot_mrs_validate(res, metric = "correlation")
 This package is released under the MIT License. See LICENSE for details.
 
 ## Attribution
-Portions of this package are based on original code by [tshmak/lassosum](https://github.com/tshmak/lassosum) (c) 2016, released under the MIT license.
+
+Portions of this package are based on original code by:
+
+- [tshmak/lassosum](https://github.com/tshmak/lassosum) (c) 2016, released under the MIT License.
+- [lelaboratoire/rethink-prs](https://github.com/lelaboratoire/rethink-prs), specifically scripts in `mb-mdr/`, used for adapting MB-MDR model parsing logic.
 
