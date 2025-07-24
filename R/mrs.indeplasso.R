@@ -18,8 +18,7 @@ mrs_indeplasso <- function(output_df, lambda = exp(seq(log(0.001), log(0.1), len
   stopifnot(all(c("pair", "F_value") %in% colnames(output_df)))
 
   F <- output_df$F_value
-
-  beta <- outer(F, lambda, function(f, l) sign(f) * pmax(abs(f) - l, 0))
+  beta <- outer(F, lambda, function(f, l) pmax(f - l, 0))
 
   return(list(
     lambda = lambda,
