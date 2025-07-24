@@ -1,50 +1,52 @@
-#' @title Full MRS Pipeline Using MB-MDR Output and Raw Model File
+#' @title Flexible MRS Pipeline for Binary or Continuous Outcome
 #' @description
-#' One-step modeling process for multilocus risk score (MRS)
-#' construction using MB-MDR results. Performs shrinkage, risk scoring, and validation.
+#' Generalized pipeline to construct MRS for either binary or continuous phenotype.
+#' Allows shrinkage, HLO-based scoring, and split-validation with metric selection.
 #'
-#' @param base_output A data frame with MB-MDR results. Must contain `pair` and `F_value` columns.
-#' @param test_data A data frame with phenotype in column 1 and SNP genotypes in the remaining columns.
-#' @param raw_model A matrix or data frame representing the MB-MDR `.model.txt` output.
-#' @param lambda Numeric vector of penalty values for soft-thresholding.
-#' @param seed Optional integer for reproducible split-validation.
-#' @return A list containing:
-#' \describe{
-#'   \item{best_lambda}{Lambda with best validation performance.}
-#'   \item{test_correlation}{Correlation between MRS and phenotype.}
-#'   \item{test_auc}{AUC in test set.}
-#'   \item{test_accuracy}{Accuracy in test set.}
-#'   \item{test_f1}{F1-score in test set.}
-#'   \item{validation_correlation}{Correlation for each lambda in base split.}
-#'   \item{results_table}{Data frame with phenotype, split label, and MRS.}
-#' }
-#' @seealso \code{\link{mrs_indeplasso}}, \code{\link{parse_model_to_mdr}}, \code{\link{mrs.default}}, \code{\link{mrs_splitvalidate}}
-#' @importFrom stats cor
-#' @importFrom dplyr %>% mutate
+#' @param base_output MB-MDR output data frame with columns "pair" and "F_value".
+#' @param test_data Data frame with phenotype in column `Class` and SNPs in others.
+#' @param raw_model Parsed MB-MDR .model file.
+#' @param lambda Numeric vector of penalty parameters.
+#' @param base_data Optional base data to determine observed genotypes in parsing.
+#' @param select_by Metric used for lambda selection. One of: "cor", "auc", "accuracy", "f1".
+#' @param seed Optional seed for split reproducibility.
+#' @param verbose If TRUE, prints details during scoring.
+#' @return A list containing validation results and test performance.
 #' @export
 mrs.pipeline <- function(
     base_output,
     test_data,
     raw_model,
     lambda = exp(seq(log(0.001), log(0.1), length.out = 20)),
-    seed = NULL
+    base_data = NULL,
+    select_by = "auc",
+    seed = NULL,
+    verbose = FALSE
 ) {
+  # Step 1: shrinkage of F-values
   beta_obj <- mrs_indeplasso(base_output, lambda)
 
-  mdr_model <- parse_model_to_mdr(raw_model)
+  # Step 2: parse HLO matrices
+  if (is.null(base_data)) {
+    base_data <- test_data[, !(colnames(test_data) %in% "Class"), drop = FALSE]
+  }
+  mdr_model <- parse_model_to_mdr(raw_model, base_data = base_data)
 
-  risk_mat <- mrs.default(
-    snp_data = test_data[, -1],
+  # Step 3: risk matrix construction
+  risk_mat <- compute_one_mrs_fast(
+    snp_data = test_data[, !(colnames(test_data) %in% "Class"), drop = FALSE],
     mdr_model = mdr_model,
     beta = beta_obj$beta,
     pair_names = beta_obj$pair_names
   )
 
+  # Step 4: split-validation using specified metric
   res <- mrs_splitvalidate(
     risk_mat = risk_mat,
     test_data = test_data,
     lambda = beta_obj$lambda,
-    seed = seed
+    seed = seed,
+    select_by = select_by
   )
 
   return(res)

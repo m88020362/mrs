@@ -2,43 +2,40 @@
 % Please edit documentation in R/mrs.pipeline.R
 \name{mrs.pipeline}
 \alias{mrs.pipeline}
-\title{Full MRS Pipeline Using MB-MDR Output and Raw Model File}
+\title{Flexible MRS Pipeline for Binary or Continuous Outcome}
 \usage{
 mrs.pipeline(
   base_output,
   test_data,
   raw_model,
   lambda = exp(seq(log(0.001), log(0.1), length.out = 20)),
-  seed = NULL
+  base_data = NULL,
+  select_by = "auc",
+  seed = NULL,
+  verbose = FALSE
 )
 }
 \arguments{
-\item{base_output}{A data frame with MB-MDR results. Must contain \code{pair} and \code{F_value} columns.}
+\item{base_output}{MB-MDR output data frame with columns "pair" and "F_value".}
 
-\item{test_data}{A data frame with phenotype in column 1 and SNP genotypes in the remaining columns.}
+\item{test_data}{Data frame with phenotype in column \code{Class} and SNPs in others.}
 
-\item{raw_model}{A matrix or data frame representing the MB-MDR \code{.model.txt} output.}
+\item{raw_model}{Parsed MB-MDR .model file.}
 
-\item{lambda}{Numeric vector of penalty values for soft-thresholding.}
+\item{lambda}{Numeric vector of penalty parameters.}
 
-\item{seed}{Optional integer for reproducible split-validation.}
+\item{base_data}{Optional base data to determine observed genotypes in parsing.}
+
+\item{select_by}{Metric used for lambda selection. One of: "cor", "auc", "accuracy", "f1".}
+
+\item{seed}{Optional seed for split reproducibility.}
+
+\item{verbose}{If TRUE, prints details during scoring.}
 }
 \value{
-A list containing:
-\describe{
-\item{best_lambda}{Lambda with best validation performance.}
-\item{test_correlation}{Correlation between MRS and phenotype.}
-\item{test_auc}{AUC in test set.}
-\item{test_accuracy}{Accuracy in test set.}
-\item{test_f1}{F1-score in test set.}
-\item{validation_correlation}{Correlation for each lambda in base split.}
-\item{results_table}{Data frame with phenotype, split label, and MRS.}
-}
+A list containing validation results and test performance.
 }
 \description{
-One-step modeling process for multilocus risk score (MRS)
-construction using MB-MDR results. Performs shrinkage, risk scoring, and validation.
-}
-\seealso{
-\code{\link{mrs_indeplasso}}, \code{\link{parse_model_to_mdr}}, \code{\link{mrs.default}}, \code{\link{mrs_splitvalidate}}
+Generalized pipeline to construct MRS for either binary or continuous phenotype.
+Allows shrinkage, HLO-based scoring, and split-validation with metric selection.
 }
