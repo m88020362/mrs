@@ -4,22 +4,26 @@
 \alias{mrs_splitvalidate}
 \title{Perform split-validation on MRS model to select best lambda}
 \usage{
-mrs_splitvalidate(risk_mat, test_data, lambda, seed = NULL)
+mrs_splitvalidate(risk_mat, test_data, lambda, seed = NULL, select_by = "auc")
 }
 \arguments{
 \item{risk_mat}{A numeric matrix of risk scores. Rows are samples, columns are lambdas.}
 
-\item{test_data}{A data.frame with a \code{Class} column (phenotype: 0/1) and optional SNPs.}
+\item{test_data}{A data.frame with a \code{Class} column (phenotype: 0/1 or continuous).}
 
 \item{lambda}{A numeric vector of lambda values; must match \code{ncol(risk_mat)}.}
 
 \item{seed}{Optional integer to fix random split for reproducibility.}
+
+\item{select_by}{One of "auc", "accuracy", "f1", or "cor". Determines how the best lambda is selected.}
 }
 \value{
-A list with elements: \code{best_lambda}, \code{test_auc}, \code{test_accuracy}, \code{test_f1},
-\code{test_correlation}, \code{validation_correlation}, \code{results_table}.
+A list with elements: \code{best_lambda}, \code{best_lambda_index}, \code{test_auc}, \code{test_accuracy},
+\code{test_f1}, \code{test_correlation}, \code{validation_correlation}, \code{metric_matrix}, and \code{results_table}.
 }
 \description{
-Split-validation procedure to select the best-performing lambda based on validation set correlation.
-The held-out test set is then used to compute AUC, accuracy, and F1-score.
+Split-validation procedure to select the best-performing lambda based on validation performance.
+For binary phenotypes, selection can be based on AUC, accuracy, or F1-score.
+For continuous phenotypes, correlation ("cor") is used. The held-out test set is then used to
+compute corresponding metrics.
 }
