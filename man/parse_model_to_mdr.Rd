@@ -4,27 +4,28 @@
 \alias{parse_model_to_mdr}
 \title{Parse MB-MDR .model File to Structured MDR Model List}
 \usage{
-parse_model_to_mdr(raw_model, row_per_pair = 14)
+parse_model_to_mdr(raw_model, base_data, filter_zero = TRUE)
 }
 \arguments{
 \item{raw_model}{A \code{data.frame} read from a \code{.model.txt} file.}
 
-\item{row_per_pair}{Number of rows per SNP pair. Default is 14.}
+\item{base_data}{A genotype matrix (samples × SNPs) used to determine actual genotype combinations per SNP pair.}
+
+\item{filter_zero}{Logical; whether to exclude HLO matrices with all-zero entries. Default is TRUE.}
 }
 \value{
 A named list where each element is a SNP pair and includes:
 \describe{
-\item{affected}{3-row matrix for affected counts.}
-\item{unaffected}{3-row matrix for unaffected counts.}
-\item{HLO}{3×3 matrix of -1, 0, 1 encoding.}
+\item{HLO}{3×3 matrix of -1, 0, 1 encoding derived from MB-MDR result.}
 }
 }
 \description{
-Parses a raw \code{.model.txt} file into a structured list containing affected/unaffected counts and HLO matrices.
+Parses a raw \code{.model.txt} file into a structured list containing 3×3 HLO matrices derived from genotype data.
 }
 \examples{
 \dontrun{
-raw_model <- fread("single_model_2D.txt", fill = TRUE, header = FALSE)
-mdr_model <- parse_model_to_mdr(raw_model)
+raw_model <- fread("model_2D.txt", fill = TRUE, header = FALSE)
+mdr_model <- parse_model_to_mdr(raw_model, base_data)
 }
+
 }

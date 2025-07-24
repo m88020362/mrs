@@ -1,4 +1,4 @@
-Package: lassosumMRS
+Package: mrs
 Type: Package
 Title: Multilocus Risk Scoring Based on MB-MDR and Pairwise Epistatic Interactions
 Version: 0.0.1
