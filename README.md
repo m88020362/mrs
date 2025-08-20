@@ -4,14 +4,14 @@ An R package for constructing **Multilocus Risk Scores (MRS)** based on SNP–SN
 
 ## Features
 
--   Support for both **binary** and **continuous** phenotypes\
--   Direct parsing of MB-MDR `.model` and `.output` files\
--   Efficient shrinkage of F-values via soft-thresholding (`mrs_indeplasso`)\
--   HLO matrix parsing to encode pairwise interaction patterns (`parse_model_to_mdr`)\
--   Construction of individual-level MRS using genotype data (`compute_one_mrs`, `compute_one_mrs_fast`)\
+-   Support for both **binary** and **continuous** phenotypes
+-   Direct parsing of MB-MDR `.model` and `.output` files
+-   Efficient shrinkage of F-values via soft-thresholding (`mrs_indeplasso`)
+-   HLO matrix parsing to encode pairwise interaction patterns (`parse_model_to_mdr`)
+-   Construction of individual-level MRS using genotype data (`compute_one_mrs`, `compute_one_mrs_fast`)
     *(use `compute_one_mrs` for safe checks; switch to `compute_one_mrs_fast` for speed once inputs are verified)*
--   Built-in **cross-validation** to select optimal lambda (`mrs_splitvalidate`)\
--   Full pipeline wrapper for streamlined analysis (`mrs.pipeline`) → integrates shrinkage, interaction encoding, risk construction, and validation in one call\
+-   Built-in **cross-validation** to select optimal lambda (`mrs_splitvalidate`)
+-   Full pipeline wrapper for streamlined analysis (`mrs.pipeline`) → integrates shrinkage, interaction encoding, risk construction, and validation in one call
 -   Visualization of **quartile-based risk separation** (`plot.mrs_quartile_risk`)
 
 ## Demo Data
